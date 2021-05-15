@@ -41,14 +41,14 @@ sets_sorted_by_year = sets.sort_values("year", ascending=True)
 
 #print(sets_sorted_by_year.head(10))
 ## find out how many different products the company was selling in their first year since launch:
-# get_first_year = sets_sorted_by_year.head(1).loc[:, "year"]
-# print(get_first_year.values[0])
-# filter_by_first_year = sets_sorted_by_year.loc[ sets_sorted_by_year["year"] == get_first_year.values[0]]
-# print(filter_by_first_year)
-# no_product_in_first_year =filter_by_first_year["set_num"].nunique()
-# print(no_product_in_first_year)
-# names_of_these_prod = filter_by_first_year["set_num"]
-# print(names_of_these_prod)
+get_first_year = sets_sorted_by_year.head(1).loc[:, "year"]
+print(get_first_year.values[0])
+filter_by_first_year = sets_sorted_by_year.loc[ sets_sorted_by_year["year"] == get_first_year.values[0]]
+print(filter_by_first_year)
+no_product_in_first_year =filter_by_first_year["set_num"].nunique()
+print(no_product_in_first_year)
+names_of_these_prod = filter_by_first_year["set_num"]
+print(names_of_these_prod)
 
 
 ## Challenge 4 : How many different products did the LEGO company sell in their first year of operation?
