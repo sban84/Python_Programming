@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession, Column, DataFrame
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 from pyspark.sql.window import WindowSpec, Window
-
+# Very good example
 spark = SparkSession.builder.master("local").appName("Test6").getOrCreate()
 
 df = spark.createDataFrame([
@@ -22,7 +22,7 @@ df.show(truncate=False)
 
 # Challenge 1 #  cleaning , removing dups and also none for key col
 
-# as we can see many col has null but depending on ise case we need to drop the rec which has None
+# as we can see many col has null but depending on use case we need to drop the rec which has None
 # like id can not be none so drop by col if any col has none
 
 df_valid = df.dropna(how="any", subset=["id"])

@@ -2,9 +2,11 @@ import pyspark
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 
+# Very good example
+
 # conf = SparkConf().setAppName("Test").setMaster("local")
-from pyspark.sql.functions import col
-from pyspark.sql.types import StringType
+from pyspark.sql.functions import *
+from pyspark.sql.types import StringType, IntegerType
 
 spark = SparkSession.builder.appName("Test").master("local").getOrCreate()
 
@@ -24,6 +26,14 @@ def getEven(n):
 
 even = data.filter(lambda x: getEven(x))
 print(even.collect())
+
+## very important to remember that to use index for the items in rdd
+## as thete is not way to operate by index in rdd , so we nee first use zipWithIndex()
+
+data_with_zip = data.zipWithIndex().sortBy(lambda x: x[1],ascending=False)
+reversed_data = data_with_zip.map(lambda x:x[0])
+print(data.collect())
+print(reversed_data.collect())
 
 data_sum = data.reduce(lambda x, y: x + y)
 print(f" sum = {data_sum}")
@@ -63,4 +73,14 @@ df = spark.createDataFrame(words , StringType()).toDF("word")
 
 df = df.groupBy(col("word")).count().alias("count").orderBy([col("count"),col("word")] , ascending=[False,False])
 df.show()
+
+
+## reverse a DF data
+
+data = ["1,2,3,4,5"]
+
+
+df = spark.createDataFrame(data , StringType()).toDF("n")
+df.show()
+df.withColumn("reversed" , reverse(col("n"))).select(col("reversed")).show()
 

@@ -2,8 +2,14 @@ from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import *
 from pyspark.sql.types import IntegerType
 
+# Very good code , refer all the logic carefully...
+# Very good example
 # NOTE most of the api in pyspark accepts col("col_name_str)
 # better to follow one style like this
+# distinct() and dropDuplicates() Both can be used to eliminate duplicated rows of a Spark DataFrame however, their difference
+# is that distinct() takes no arguments at all, while dropDuplicates()
+# can be given a subset of columns to consider when dropping duplicated records
+
 spark = SparkSession.builder.appName("Test5").master("local").getOrCreate()
 
 df_miss = spark.createDataFrame([
@@ -26,6 +32,7 @@ item_distinct_count = df_miss.distinct().count()
 print(f"count {item_count} and dis count {item_distinct_count}")
 
 df_miss.agg(count('id').alias('count'), countDistinct('id').alias('distinct')).show()
+
 
 # Challenge 2 # now find out the records which are fully duplicated
 comom_col = [col(c) for c in df_miss.columns ]
@@ -67,6 +74,11 @@ df_miss.groupby(df_miss.columns).agg(count("*").alias("count")).filter(col("coun
 # +---+------+------+---+------+------+-----+
 
 df_miss.orderBy(col("id") , ascending= True).show()
+
+
+# below core is very useful .
+
+df_miss.count()
 
 
 

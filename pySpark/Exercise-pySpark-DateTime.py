@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 
-
+# Very good example
 spark = SparkSession.builder.getOrCreate()
 spark.sparkContext.setLogLevel("ERROR")
 data = [

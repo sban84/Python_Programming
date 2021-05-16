@@ -2,6 +2,7 @@
 ## and then create RDD and DataFrame from there
 ## We can create DF directly also shown here....
 ## by providing schema while creating DF
+# Very good example
 
 from pyspark import  SparkConf, SparkContext
 from pyspark.sql.types import *
@@ -23,7 +24,9 @@ dept = [("Finance",10),("Marketing",20),("Sales",30),("IT",40)]
 rdd = spark.sparkContext.parallelize(dept)
 df = rdd.toDF(["dept" , "sal"])
 df.show(truncate=False)
-
+df = spark.createDataFrame(rdd,["dept" , "sal"]) # remembet this as createDataFrame() is very powerful ,
+# can take rdd / raw list / raw list of list / list of tuple / pandas dataframe .
+df.show()
 
 ## provide Schema manually to create DF
 schema = StructType([StructField("name",StringType(),True), StructField("id",IntegerType(),True)])

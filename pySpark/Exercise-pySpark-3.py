@@ -1,4 +1,5 @@
 ##  VERY IMPORTANT:: Check all the code , remember the way its done
+# Very good example
 # ###########################
 ## NOTE for sum and max after groupby() we dont need agg
 
@@ -23,7 +24,7 @@ filamentData = [['filamentA', '100W', 605],
                 ['filamentB', '200W', 555],
                 ['filamentC', '50W', 100]]
 
-# print(filamentData)
+print(type(filamentData))
 spark = SparkSession.builder.appName("Test").master("local").getOrCreate()
 df = spark.createDataFrame(filamentData).toDF("FilamentType", "BulbPower", "LifeInHours")
 df.show(truncate=False)
@@ -51,7 +52,7 @@ print("Count the frequency of distinct values in the FilamentType categorical co
 distinct_count = df.groupby("FilamentType").count()
 distinct_count.show()
 
-# countDistinct will give the count if unique values for that col.
+# countDistinct will give the count of unique values for that col.
 distinct_count_1 = df.groupby("FilamentType").agg(countDistinct("BulbPower").alias("cnt_by_type"))
 distinct_count_1.show()
 
@@ -61,14 +62,15 @@ distinct_count_1.show()
 distinct_count_2 = df.groupby("BulbPower").count()
 distinct_count_2.show()
 
-for row in distinct_count_2.collect():
+for row in distinct_count_2.collect(): # Row(BulbPower='200W', count=8)
     print(f"way to get the count from DF, BulbPower type = {row}['BulbPower']"
-          f"and its count = {row['count']}")  # Row(BulbPower='200W', count=8)
+          f"and its count = {row['count']}")
 
 #################### VERY IMPORTANT ###########################
 ## Some random challenge , for agg function
 
 df.groupby(df["FilamentType"]).agg(avg("LifeInHours")).show(truncate=False)
+# withColumn will replace if there is already col name with same name
 df.withColumn("LifeInHours" , col("LifeInHours").cast(DoubleType()))
 ## NOTE for sum and max after groupby() we dont need agg as below
 df.groupby("FilamentType").sum("LifeInHours").show(truncate=False)

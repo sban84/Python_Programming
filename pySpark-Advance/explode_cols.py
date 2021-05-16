@@ -1,9 +1,11 @@
-#Pyspark: Split multiple array columns into rows
-#I have a dataframe which has one row, and several columns. Some of the columns are single values, and others are lists. All list columns are the same length. I want to split each list column into a separate row, while keeping any non-list column as is.
+"""Pyspark: Split multiple array columns into rows
+I have a dataframe which has one row, and several columns. Some of the columns are single values,
+and others are lists. All list columns are the same length. I want to split each list column into a
+separate row, while keeping any non-list column as is.
 
 #** refernce :- https://stackoverflow.com/questions/59607979/convert-an-array-column-to-array-of-structs-in-pyspark-dataframe
 # ** https://www.semicolonworld.com/question/53774/pyspark-split-multiple-array-columns-into-rows
-
+"""
 from pyspark import Row
 from pyspark.sql import SparkSession
 from pyspark.sql.dataframe import DataFrame
@@ -31,7 +33,7 @@ df = spark.createDataFrame([Row(a=1, b=[1,2,3],c=[7,8,9], d='foo')])
 # if we go with this , # So we can not do this
 df_exploded = df.withColumn('b', explode('b'))\
     .withColumn("c",explode(col("c"))
-)# will create curr_row_count X no_of_items_in_array
+)# will create curr_row_count X no_of_items_in_array ,here it will be 9 as 2 array with 3 items each
 df_exploded.show(truncate=False)
 
 # way 1 ,
@@ -47,7 +49,8 @@ flattened_df.select(
     col("a"),col("exploded_merged_col.b"),col("exploded_merged_col.c"),col("d")
 ).show()
 
-# way 2 , this is useful to manipulate any col in DF , useful for any arbritary number of col and items in it . esle use array_zip(c1,c2) as seen before
+# way 2 , this is useful to manipulate any col in DF , useful for any arbritary number of col and items in it .
+# else use array_zip(c1,c2) as seen before
 
 df = spark.createDataFrame([Row(a=1, b=[1,2,3],c=[7,8,9], d='foo')])
 

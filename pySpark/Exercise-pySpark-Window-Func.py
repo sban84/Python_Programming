@@ -2,6 +2,11 @@ from pyspark.sql import SparkSession, Window
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 
+# spec which will have order by , for some func like rank(), row_number() and dense_rank()
+# orderBy is must, because with that it decides the order
+# partitionBy is optional , if not passed then window will be applied
+# on the whole DF , else DF will be divided by partitionBy cols.
+# Very good example
 spark = SparkSession.builder.getOrCreate()
 emp_data = [("James", "Sales", 3000),
             ("Michael", "Sales", 4600),
@@ -19,8 +24,7 @@ columns = ["employee_name", "department", "salary"]
 df = spark.createDataFrame(data=emp_data, schema=columns)
 df.show(truncate=False)
 
-# spec which will have order by , for some func like rank(), row_number() and dense_rank()
-# orderBy is must, because with that it decides the order
+
 spec = Window.partitionBy(col("department")).orderBy("salary")
 
 """row_number()"""
