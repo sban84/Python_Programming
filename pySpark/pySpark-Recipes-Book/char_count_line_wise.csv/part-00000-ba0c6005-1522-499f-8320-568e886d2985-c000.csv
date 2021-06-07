@@ -1,0 +1,4 @@
+words,char_count
+"To calculate the total number of characters in our file, we can calculate the number of characters in each line and",115
+"then sum them. To calculate the total number of characters in each line,",72
+we can use the len() function.,30

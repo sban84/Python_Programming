@@ -1,0 +1,3 @@
+To calculate the total number of characters in our file, we can calculate the number of characters in each line and
+then sum them. To calculate the total number of characters in each line,
+we can use the len() function.

@@ -1,0 +1,7 @@
+1- How to add 2 df and one series to a DF
+2- how to get all the col along with new col for groupby result , such as windows func in sql / spark
+3- Learn about Tungsten and Catalyst in Spark
+4. Cache
+5- multiple Join
+6- Certisian join / Co relation aound data using spark example and use cases
+
