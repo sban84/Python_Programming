@@ -63,7 +63,7 @@ distinct_count_2 = df.groupby("BulbPower").count()
 distinct_count_2.show()
 
 for row in distinct_count_2.collect(): # Row(BulbPower='200W', count=8)
-    print(f"way to get the count from DF, BulbPower type = {row}['BulbPower']"
+    print(f"way to get the count from DF, BulbPower type = {row['BulbPower']}"
           f"and its count = {row['count']}")
 
 #################### VERY IMPORTANT ###########################
@@ -72,7 +72,7 @@ for row in distinct_count_2.collect(): # Row(BulbPower='200W', count=8)
 df.groupby(df["FilamentType"]).agg(avg("LifeInHours")).show(truncate=False)
 # withColumn will replace if there is already col name with same name
 df.withColumn("LifeInHours" , col("LifeInHours").cast(DoubleType()))
-## NOTE for sum and max after groupby() we dont need agg as below
+## NOTE for sum and min/max after groupby() we dont need agg as below
 df.groupby("FilamentType").sum("LifeInHours").show(truncate=False)
 df.groupby("FilamentType").agg(countDistinct("LifeInHours")).show(truncate=False)
 ## NOTE for sum and max after groupby() we dont need agg as below
@@ -81,11 +81,14 @@ df.groupby("FilamentType").max("LifeInHours").show(truncate=False)
 df.groupby("FilamentType").agg(count("LifeInHours").alias("cnt")) \
     .sort(col("cnt"), ascending=False).show(truncate=False)
 
+df.groupby(col("FilamentType")).agg(round(avg(col("LifeInHours"))).alias("avg_rounded")).show(truncate=False)
+
+# Try creating table i-memory in Spark side and make use of the SQL syntax to do the same.
 df.createOrReplaceTempView("bulb_table")
 sql_1 = spark.sql("select FilamentType, count(distinct LifeInHours) as cnt  from bulb_table group by FilamentType")
 sql_1.show(truncate=False)
 
-## Computing Average, with round function.
+# Computing Average, with round function.
 sql_2 = spark.sql(" select FilamentType , round(avg(LifeInHours)) as avg_life  from bulb_table "
                   "group by FilamentType limit 5")
 sql_2.show(truncate=False)

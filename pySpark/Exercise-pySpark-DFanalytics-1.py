@@ -29,11 +29,12 @@ df_valid = df.dropna(how="any", subset=["id"])
 df_valid.show()
 
 # NOTE : Remember check full duplicated rec , by simple count , good way to get the which rec is duplicated
-(df_valid.groupby(df_valid.columns).agg(count("*").alias("count"), countDistinct("*").alias("distinct_count"))
- ).show()
+df_valid.groupby(df_valid.columns).agg(count("*").alias("count"), countDistinct("*").alias("distinct_count"))\
+    .show()
 
 no_duplicate = df_valid.dropDuplicates()  # df_valid.dropDuplicates(subset=["id"]) for any col
 
+# check after dropDuplicates()
 (no_duplicate.groupby(df_valid.columns).agg(count("*").alias("count"), countDistinct("*").alias("distinct_count"))
  ).show()
 

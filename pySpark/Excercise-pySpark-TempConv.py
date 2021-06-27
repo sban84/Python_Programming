@@ -30,6 +30,7 @@ print(f_temp_rdd_1.collect())
 
 df = spark.createDataFrame(rdd, StringType()).toDF(
     "id")  # id the underlying data have multiple types like here int anf float then use StringTYpe else will not work
+
 # udf_func = udf(to_ferenhite,DoubleType())
 udf_func = udf(lambda x: to_ferenhite(x),
                DoubleType())  # remember this , same as above way of doing the same , but this is more readble way .
@@ -81,5 +82,16 @@ filter_sec_year_students.show(truncate=False)
 
 # • All students who have earned more than an 80% average in the second semester of the second year
 avg_score_by_id_year.filter( (col("year") == "year2") & (col("score2") > 80) ).show()
+
+
+# practise UDF , just add 2 col values and create new col for that.
+
+data = [ ("a" , 1, 1) ,("b" , 2,3) ]
+df =  spark.createDataFrame(data, ["name" , "s1" , "s2"])
+df.show()
+add_udf = udf(lambda x,y : x+y)
+
+df = df.withColumn("added_score" , add_udf(col("s1").cast(IntegerType()),col("s2").cast(IntegerType())))
+df.show()
 
 

@@ -4,7 +4,7 @@ from pyspark.sql.types import IntegerType
 
 # Very good code , refer all the logic carefully...
 # Very good example
-# NOTE most of the api in pyspark accepts col("col_name_str)
+# NOTE most of the api in pyspark accepts col("col_name_str")
 # better to follow one style like this
 # distinct() and dropDuplicates() Both can be used to eliminate duplicated rows of a Spark DataFrame however, their difference
 # is that distinct() takes no arguments at all, while dropDuplicates()
@@ -40,6 +40,7 @@ all_col_grp_count = df_miss.groupby(df_miss.columns).agg(count("*").alias("count
 # since the col names are same in both df so passing a list of names will be easy .
 # and also it will avoid duplicate col names come twice in the o/p df.
 
+# just see how self join works
 # join_with_original_df: DataFrame = df_miss.join(all_col_grp_count ,
 #                                                 (df_miss["id"] == all_col_grp_count["id"] ) ,
 #                                                 "inner")
@@ -48,12 +49,12 @@ all_col_grp_count = df_miss.groupby(df_miss.columns).agg(count("*").alias("count
 #                                                 df_miss.columns ) ,
 #                                                 "inner")
 
-join_with_original_df: DataFrame = df_miss.groupby(df_miss.columns).agg(
+rec_counts_taking_all_cols: DataFrame = df_miss.groupby(df_miss.columns).agg(
     count("*").alias("count")
 )
 
 
-join_with_original_df.filter(col("count") > 1).show(truncate=False)
+rec_counts_taking_all_cols.filter(col("count") > 1).show(truncate=False)
 
 # +---+------+------+---+------+------+-----+
 # |id |weight|height|age|gender|income|count|
@@ -61,7 +62,7 @@ join_with_original_df.filter(col("count") > 1).show(truncate=False)
 # |7  |129.2 |5.3   |42 |M     |76000 |2    |
 
 
-## But if we drop this where count > 1 then we will loose data original + duplicated one.
+# But if we drop this where count > 1 then we will loose data original + duplicated one.
 # so to drop duplicates in DF , we must use df.dropDuplicates() OR  df.dropDuplicates("colName") for any col specific
 
 df_miss = df_miss.dropDuplicates().drop("count")

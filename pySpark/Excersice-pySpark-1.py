@@ -28,7 +28,7 @@ even = data.filter(lambda x: getEven(x))
 print(even.collect())
 
 ## very important to remember that to use index for the items in rdd
-## as thete is not way to operate by index in rdd , so we nee first use zipWithIndex()
+## as thete is no way to operate by index in rdd , so we nee first use zipWithIndex()
 
 data_with_zip = data.zipWithIndex().sortBy(lambda x: x[1],ascending=False)
 reversed_data = data_with_zip.map(lambda x:x[0])
@@ -66,7 +66,7 @@ words_with_count =  rdd.flatMap(lambda x: x.split(" ")).map(lambda x:(x,1)).redu
 print(words_with_count.collect() )
 
 
-### Using DF the same
+# *********** Using DF the same ****************
 words = rdd.flatMap(lambda x: x.split(" "))
 df = spark.createDataFrame(words , StringType()).toDF("word")
 # order by ny multiple cols , if first col has tie then sec order by will happen by sec col according to the ascending rules
@@ -75,7 +75,7 @@ df = df.groupBy(col("word")).count().alias("count").orderBy([col("count"),col("w
 df.show()
 
 
-## reverse a DF data
+# reverse a DF data
 
 data = ["1,2,3,4,5"]
 

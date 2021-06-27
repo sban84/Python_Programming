@@ -29,7 +29,7 @@ df_miss = spark.createDataFrame([
 
 df_miss.show(truncate=False)
 
-
+df_miss.agg(sum("age").alias("total_age_complete_df")).show()
 
 result = [ count(when( col(c).isNull() , 1)).alias(c) for c in df_miss.columns]
 print(result)
@@ -38,5 +38,5 @@ df_miss.select(result).show()
 # df_miss.filter(col("age").isNull()).show()
 
 # doing the same as above but in more code breakup , more verbose
-df_miss.agg(sum("age").alias("total_age_complete_df")).show()
+
 df_miss.withColumn("no_age_null" , when(col("age").isNull() , 1)).agg(count(col("no_age_null"))).show()
