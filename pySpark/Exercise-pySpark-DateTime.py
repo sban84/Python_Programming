@@ -26,16 +26,18 @@ df.withColumn("months_diff" , months_between(col("end_date") , col("start_date")
 
 df.filter(months_between(col("end_date") , col("start_date")) > 9).show()
 
+# Same using our own python function as UDF
+
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
-def months_diff_by_python_code(end, start) :
-    end = datetime.strptime(end, "%Y-%m-%d")
-    start = datetime.strptime(start, "%Y-%m-%d")
-    r = relativedelta(start, end)
+def months_diff_by_python_code(end_date, start_date) :
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    r = relativedelta(end_date, start_date)
     print(r.months)
     mon_diff = r.months + (12 * r.years)
-    if r.months > 0:
-        mon_diff += 1
+    # if r.months > 0:
+    #     mon_diff += 1
     return mon_diff
 
 
@@ -43,7 +45,7 @@ def months_diff_by_python_code(end, start) :
 # df.withColumn("months_diff" , round(months_between(col("start_date") , col("end_date")))).show()
 # Now use the our function as UDF, ignore the 0 result as in python logiclly its correct
 # not sure why in spark its 1
-months_between_udf = udf(lambda end,start: months_diff_by_python_code(start,end))
+months_between_udf = udf(lambda end,start: months_diff_by_python_code(end,start))
 df = df.withColumn("months_diff" , round(months_between(col("end_date") , col("start_date"))))\
     .withColumn("months_diff_usingUDF" , months_between_udf(col("end_date"),col("start_date")))
 

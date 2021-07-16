@@ -1,7 +1,7 @@
 """
 Very good code ,
 1. how to create a col with array of items to flatten into multiple cols
-by first coverting to array[struct_col] then explode that new col.
+by first converting to array[struct_col] then explode that new col.
 so that we can use new_col.item for better use.
 2. Find out the duplicated rec by 2 ways , self join & other one group and then filter
 """
@@ -30,20 +30,20 @@ df.withColumn("id_name_combined", array(col("id"), col("name"))).show()
 df.filter(array_contains(col("scores"), 50)).show()
 
 
-# 3. find the student ids whose 1st yesr score is same
+# 3. find the student ids whose 1st year score is same
 
 # for expanding a array of items to individual cols, we need to first convert array[struct],
 # then call expand(array_col) , then we can select by temp.first_year way.
 def expand_array_col_into_seperate_col(colName):
-    result = array([
-        struct(col(colName).getItem(0).alias("first_year"),
-               col(colName).getItem(1).alias("sec_year"))
-    ])
+    result = array([struct(col(colName).getItem(0).alias("first_year"),
+                           col(colName).getItem(1).alias("sec_year"))
+                    ])
     return result
 
 
 df = spark.createDataFrame(data, ["id", "scores", "name"])
 df.withColumn("temp", expand_array_col_into_seperate_col("scores")).show(truncate=False)
+df.withColumn("temp", expand_array_col_into_seperate_col("scores")).printSchema()
 
 flattended_df = df.withColumn("temp", explode(expand_array_col_into_seperate_col("scores")))
 flattended_df.printSchema()
@@ -55,8 +55,8 @@ flattended_df.show(truncate=False)
 #     flattended_df.groupby(col("first_year").agg((count("*") > 1).cast(IntegerType()).alias("is_duplicated")) )
 #     , ["id","name"],"inner"
 # )
-join_df= flattended_df.join(
-    flattended_df.groupBy("first_year").agg((count("*")>1).cast("int").alias("Duplicate_indicator")),
+join_df = flattended_df.join(
+    flattended_df.groupBy("first_year").agg((count("*") > 1).cast("int").alias("Duplicate_indicator")),
     on=["first_year"],
     how="inner"
 )
@@ -64,12 +64,14 @@ print("after self join ******")
 join_df.show()
 join_df.filter(col("Duplicate_indicator") == 1).show()
 
-## another way without jon ... anything is okay , but join logic is useful in some cases so remember
+# another way without self jon.... anything is okay , but
+# join logic is useful in some cases so remember
 print("another way without join")
-flattended_df = flattended_df.withColumnRenamed("first_year" , "first_year_score")
+flattended_df = flattended_df.withColumnRenamed("first_year", "first_year_score")
 flattended_df.printSchema()
-rec_with_count = flattended_df.groupby(col("first_year_score")).agg(count("*").alias("count") ).filter(col("count") > 1)
+rec_with_count = flattended_df.groupby(col("first_year_score")).agg(count("*").alias("count")).filter(col("count") > 1)
 rec_with_count.show()
+print(rec_with_count.rdd.collect())
 print(rec_with_count.rdd.collect()[0])
 
 for row in rec_with_count.rdd.collect():
@@ -77,14 +79,9 @@ for row in rec_with_count.rdd.collect():
 
 res.show()
 
+# 4.array_contains(col, value)
 
-#4.array_contains(col, value)
-
-df.withColumn("contains_test" , array_contains(col("scores") , 50)).show()
-
-
-
-
+df.withColumn("contains_test", array_contains(col("scores"), 50)).show()
 
 # for struct type ,
 # data = [

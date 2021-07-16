@@ -29,10 +29,11 @@ print(even.collect())
 
 ## very important to remember that to use index for the items in rdd
 ## as thete is no way to operate by index in rdd , so we nee first use zipWithIndex()
-
-data_with_zip = data.zipWithIndex().sortBy(lambda x: x[1],ascending=False)
-reversed_data = data_with_zip.map(lambda x:x[0])
 print(data.collect())
+data_with_zip = data.zipWithIndex().sortBy(lambda x: x[1],ascending=False)
+print(data_with_zip.collect())
+reversed_data = data_with_zip.map(lambda x:x[0])
+
 print(reversed_data.collect())
 
 data_sum = data.reduce(lambda x, y: x + y)

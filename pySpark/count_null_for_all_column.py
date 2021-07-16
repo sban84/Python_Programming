@@ -8,7 +8,7 @@ as per the requirement.
 
 """
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import  *
+from pyspark.sql.functions import *
 
 spark = SparkSession.builder.appName("Test5").master("local").getOrCreate()
 # find each col have how many null values , we can enhance the condition ,

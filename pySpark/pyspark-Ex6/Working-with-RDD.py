@@ -1,5 +1,5 @@
 """
-Good exmaple code to brush up RDD and DF creations
+Good example code to brush up RDD and DF creations
 """
 from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType, StringType, DoubleType, StructType, StructField
@@ -13,7 +13,7 @@ data = [1,2,3,4,5]
 
 # 1. Sum
 
-rdd =  spark.sparkContext.parallelize(data)
+rdd = spark.sparkContext.parallelize(data)
 print(rdd.collect())
 sum_way1 = rdd.sum()
 print("sum_way1" , sum_way1)
@@ -43,4 +43,9 @@ df.show()
 
 schema =  StructType([StructField("name",StringType(),False) , StructField("score",StringType() , True) ])
 df =  spark.createDataFrame(data,schema)
-df.select(col("name"),col("score").cast(IntegerType())).show()
+df = df.select(col("name"),col("score").cast(IntegerType()))
+df.printSchema()
+
+df_grp_by_name = df.groupby(col("name")).agg(sum(col("score")))
+df_grp_by_name.show(truncate=False)
+

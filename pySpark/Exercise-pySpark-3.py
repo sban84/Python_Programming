@@ -83,7 +83,7 @@ df.groupby("FilamentType").agg(count("LifeInHours").alias("cnt")) \
 
 df.groupby(col("FilamentType")).agg(round(avg(col("LifeInHours"))).alias("avg_rounded")).show(truncate=False)
 
-# Try creating table i-memory in Spark side and make use of the SQL syntax to do the same.
+# Try creating table in-memory in Spark side and make use of the SQL syntax to do the same.
 df.createOrReplaceTempView("bulb_table")
 sql_1 = spark.sql("select FilamentType, count(distinct LifeInHours) as cnt  from bulb_table group by FilamentType")
 sql_1.show(truncate=False)
