@@ -8,8 +8,8 @@ so that we can use new_col.item for better use.
 
 from pyspark import Row
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import explode, col, array, array_contains, struct, flatten, rank, row_number, count
-from pyspark.sql.types import IntegerType
+from pyspark.sql.functions import explode, col, array, array_contains, struct, flatten, rank, row_number, count, udf
+from pyspark.sql.types import IntegerType, ArrayType
 from pyspark.sql.window import Window
 
 spark = SparkSession.builder.getOrCreate()
@@ -35,16 +35,17 @@ df.filter(array_contains(col("scores"), 50)).show()
 # for expanding a array of items to individual cols, we need to first convert array[struct],
 # then call expand(array_col) , then we can select by temp.first_year way.
 def expand_array_col_into_seperate_col(colName):
-    result = array([struct(col(colName).getItem(0).alias("first_year"),
-                           col(colName).getItem(1).alias("sec_year"))
-                    ])
+    result = array([struct(col(colName).getItem(0).alias("first_year")
+                           ,col(colName).getItem(1).alias("sec_year"))]
+                   )
     return result
 
 
+#expand_array_col_into_seperate_col_udf = udf(lambda x: expand_array_col_into_seperate_col(x))
 df = spark.createDataFrame(data, ["id", "scores", "name"])
 df.withColumn("temp", expand_array_col_into_seperate_col("scores")).show(truncate=False)
-df.withColumn("temp", expand_array_col_into_seperate_col("scores")).printSchema()
-
+# df.withColumn("temp", expand_array_col_into_seperate_col_udf("scores")).printSchema()
+df.printSchema()
 flattended_df = df.withColumn("temp", explode(expand_array_col_into_seperate_col("scores")))
 flattended_df.printSchema()
 flattended_df.show(truncate=False)

@@ -72,10 +72,10 @@ for row in distinct_count_2.collect(): # Row(BulbPower='200W', count=8)
 df.groupby(df["FilamentType"]).agg(avg("LifeInHours")).show(truncate=False)
 # withColumn will replace if there is already col name with same name
 df.withColumn("LifeInHours" , col("LifeInHours").cast(DoubleType()))
-## NOTE for sum and min/max after groupby() we dont need agg as below
+# NOTE for sum and min/max after groupby() we dont need agg as below
 df.groupby("FilamentType").sum("LifeInHours").show(truncate=False)
 df.groupby("FilamentType").agg(countDistinct("LifeInHours")).show(truncate=False)
-## NOTE for sum and max after groupby() we dont need agg as below
+# NOTE for sum and max after groupby() we dont need agg as below
 df.groupby("FilamentType").max("LifeInHours").show(truncate=False)
 
 df.groupby("FilamentType").agg(count("LifeInHours").alias("cnt")) \

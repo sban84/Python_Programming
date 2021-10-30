@@ -23,7 +23,7 @@ rdd = spark.sparkContext.parallelize(dept)
 df = rdd.toDF(["dept", "sal"])
 df.show(truncate=False)
 df = spark.createDataFrame(rdd, ["dept", "sal"])  # remembet this as createDataFrame() is very powerful ,
-# can take rdd / raw list / raw list of list / list of tuple / pandas dataframe to Spark DF.
+# can take rdd / raw list / raw list of list / list of tuple / pandas dataframe into Spark DF.
 df.show()
 
 ## provide Schema manually to create DF

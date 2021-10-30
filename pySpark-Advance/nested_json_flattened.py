@@ -1,5 +1,5 @@
 # refernce : https://docs.microsoft.com/en-us/azure/synapse-analytics/how-to-analyze-complex-schema
-
+# https://gist.github.com/nmukerje/e65cde41be85470e4b8dfd9a2d6aed50
 from pyspark.sql.functions import col
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import explode

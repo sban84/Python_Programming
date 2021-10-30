@@ -5,11 +5,11 @@ from pyspark.sql.types import *
 from pyspark.sql.functions import *
 
 # spec which will have order by , for some func like rank(), row_number() and dense_rank()
-# orderBy is must, because with that it decides the order
+# orderBy is must, because with that it decides the order.
 # partitionBy is optional , if not passed then window will be applied
 # on the whole DF , else DF will be divided by partitionBy cols.
 # Very good example
-spark = SparkSession.builder.getOrCreate()
+spark = SparkSession.builder.config("spark.driver.bindAddress", "localhost").getOrCreate()
 emp_data = [("James", "Sales", 3000),
             ("Michael", "Sales", 4600),
             ("Robert", "Sales", 4100),
@@ -26,7 +26,7 @@ columns = ["employee_name", "department", "salary"]
 df = spark.createDataFrame(data=emp_data, schema=columns)
 df.show(truncate=False)
 
-spec = Window.partitionBy(col("department")).orderBy("salary")
+spec = Window.partitionBy(col("department")).orderBy(col("salary").desc())
 
 """row_number()"""
 df_row_number = df.withColumn("row_number", row_number().over(spec))
@@ -75,11 +75,10 @@ data = [
     ("dairy", "butter", "50")
 ]
 
-
-df = spark.createDataFrame(data, ["type","name","price"])
+df = spark.createDataFrame(data, ["type", "name", "price"])
 df.show()
 
-spec_2 = Window.partitionBy(col("type")).orderBy(col("name")).rowsBetween(-sys.maxsize,0)
+spec_2 = Window.partitionBy(col("type")).orderBy(col("name")).rowsBetween(-sys.maxsize, 0)
 # spec_2 = Window.rowsBetween(-sys.maxsize,0) # DF level no partitionBy
-df = df.withColumn("cum_sum" , sum(col("price")).over(spec_2))
+df = df.withColumn("cum_sum", sum(col("price")).over(spec_2))
 df.show(truncate=False)

@@ -1,0 +1,10 @@
+# flattening json / complex data types
+https://gist.github.com/nmukerje/e65cde41be85470e4b8dfd9a2d6aed50
+
+# Complex data types in pyspark creation manually and processing
+https://towardsdatascience.com/nested-data-types-in-spark-3-1-663e5ed2f2aa
+
+# DSP and API way of using sql functions
+https://towardsdatascience.com/a-decent-guide-to-dataframes-in-spark-3-0-for-beginners-dcc2903345a5
+https://towardsdatascience.com/nested-data-types-in-spark-3-1-663e5ed2f2aa
+

@@ -1,0 +1,21 @@
+https://pypi.org/project/pyspark-test/0.1.0/
+
+-- unittest
+https://engblog.nextdoor.com/unit-testing-apache-spark-with-py-test-3b8970dc013b
+
+n python 3, if you're using unittest.TestCase:
+
+You must have an empty (or otherwise) __init__.py file in your test directory (must be named test/)
+Your test files inside test/ match the pattern test_*.py. They can be inside a subdirectory under test/, and those subdirs can be named as anything.
+Then, you can run all the tests with:
+
+python -m unittest
+
+// to run a specific test class
+python -m unittest my_unit_test_script.py
+
+
+-- pytest
+
+https://hangar.tech/posts/unit-testing-spark/
+https://mungingdata.com/pyspark/testing-pytest-chispa/

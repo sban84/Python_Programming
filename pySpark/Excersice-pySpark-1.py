@@ -85,3 +85,8 @@ df = spark.createDataFrame(data , StringType()).toDF("n")
 df.show()
 df.withColumn("reversed" , reverse(col("n"))).select(col("reversed")).show()
 
+df.selectExpr("round(rand()) as rand_col").show()
+df.selectExpr("round(rand()) as rand_col").show()
+df.selectExpr("round(rand()) as rand_col").show()
+df.selectExpr("round(rand()) as rand_col").show()
+
