@@ -58,5 +58,6 @@ mask = [count(when(col(c).isNull(), 1)).alias(c) for c in df.columns]
 df.select(mask).show()
 
 
+
 df = df.dropna(how="any", subset=["f_name"])
 df.show()

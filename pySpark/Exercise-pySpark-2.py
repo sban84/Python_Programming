@@ -1,13 +1,14 @@
-"""# This program is good to refer how to create manual data
-# and then create RDD and DataFrame from there
-# We can create DF directly also shown here....
-# by providing schema while creating DF
-# Very good example"""
-
 from pyspark import SparkConf, SparkContext
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 import pandas as pd
+
+"""
+This program is good to refer how to create manual data
+and then create RDD and DataFrame from there
+We can create DF directly also shown here....
+by providing schema while creating DF
+Very good example"""
 
 spark = SparkSession.builder.appName("Test-2").master("local").getOrCreate()
 # sc = spark.sparkContext()
@@ -22,7 +23,7 @@ dept = [("Finance", 10), ("Marketing", 20), ("Sales", 30), ("IT", 40)]
 rdd = spark.sparkContext.parallelize(dept)
 df = rdd.toDF(["dept", "sal"])
 df.show(truncate=False)
-df = spark.createDataFrame(rdd, ["dept", "sal"])  # remembet this as createDataFrame() is very powerful ,
+df = spark.createDataFrame(rdd, ["dept", "sal"])  # remember this as createDataFrame() is very powerful ,
 # can take rdd / raw list / raw list of list / list of tuple / pandas dataframe into Spark DF.
 df.show()
 
@@ -34,7 +35,6 @@ df.show(truncate=False)
 list_data = [("a", 1), ("b", 10)]  # its same if we have list of list / list of tuple
 df = spark.createDataFrame(list_data, schema=schema)
 df.show(truncate=False)
-
 
 list_data = [["a", 1], ["b", 10]]  # its same if we have list of list / list of tuple
 df = spark.createDataFrame(list_data, schema=schema)

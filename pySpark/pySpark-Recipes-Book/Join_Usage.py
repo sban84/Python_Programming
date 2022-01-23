@@ -66,7 +66,8 @@ person_graduate_prog_semi.show(truncate=False)
 # 4. left anti :returns data from left DF which are not matched with the right DF
 # Left anti joins are the opposite of left semi joins. Like left semi joins, they do not
 # actually include any values from the right DataFrame. They only compare values to see
-# if the value exists in the second DataFrame. However, rather than keeping the values that
+# if the value exists in the second DataFrame. However, in left anti join,
+# rather than keeping the values that
 # exist in the second DataFrame, they keep only the values that do not have a corresponding
 # key in the second DataFrame. Think of anti joins as a NOT IN SQL-style filter
 print("person_graduate_prog_anti")

@@ -37,6 +37,8 @@ df_with_rank = df.withColumn("rank", rank().over(spec))
 df_with_rank.show(truncate=False)
 
 """dense_rank()"""
+# dense_rank() OVER (PARTITION BY category ORDER BY revenue DESC) as rank
+#   FROM productRevenue
 df_dense = df.withColumn("dense_rank", dense_rank().over(spec))
 df_dense.show(truncate=False)
 

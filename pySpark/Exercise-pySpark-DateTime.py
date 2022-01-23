@@ -6,31 +6,33 @@ from pyspark.sql.functions import *
 spark = SparkSession.builder.getOrCreate()
 spark.sparkContext.setLogLevel("ERROR")
 data = [
-    (1,"2015-05-03" , "2021-05-05"),
-    (2,"2006-02-01" , "2011-02-01"),
-    (3,"2016-02-01" , "2017-02-01"),
-    (4,"2021-04-06" , "2021-05-02"),
+    (1, "2015-05-03", "2021-05-05"),
+    (2, "2006-02-01", "2011-02-01"),
+    (3, "2016-02-01", "2017-02-01"),
+    (4, "2021-04-06", "2021-05-02"),
 ]
 
-df = spark.createDataFrame(data).toDF("id" , "start_date" , "end_date")
+df = spark.createDataFrame(data).toDF("id", "start_date", "end_date")
 df.show(truncate=False)
 
 # 1, calculate the date diff.
-with_days_diff_df = df.withColumn("days_diff" , datediff(col("end_date") , col("start_date")))
+with_days_diff_df = df.withColumn("days_diff", datediff(col("end_date"), col("start_date")))
 with_days_diff_df.show()
 
-df.withColumn("months" , month(col("end_date"))).show()
-df.withColumn("months_diff" , months_between(col("end_date") , col("start_date"), roundOff=False)).show()
+df.withColumn("months", month(col("end_date"))).show()
+df.withColumn("months_diff", months_between(col("end_date"), col("start_date"), roundOff=False)).show()
 
-#2. filter rec whose moths diff > 9 months
+# 2. filter rec whose moths diff > 9 months
 
-df.filter(months_between(col("end_date") , col("start_date")) > 9).show()
+df.filter(months_between(col("end_date"), col("start_date")) > 9).show()
 
 # Same using our own python function as UDF
 
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
-def months_diff_by_python_code(end_date, start_date) :
+
+
+def months_diff_by_python_code(end_date, start_date):
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     r = relativedelta(end_date, start_date)
@@ -41,15 +43,13 @@ def months_diff_by_python_code(end_date, start_date) :
     return mon_diff
 
 
-
 # df.withColumn("months_diff" , round(months_between(col("start_date") , col("end_date")))).show()
 # Now use the our function as UDF, ignore the 0 result as in python logiclly its correct
 # not sure why in spark its 1
-months_between_udf = udf(lambda end,start: months_diff_by_python_code(end,start))
-df = df.withColumn("months_diff" , round(months_between(col("end_date") , col("start_date"))))\
-    .withColumn("months_diff_usingUDF" , months_between_udf(col("end_date"),col("start_date")))
+months_between_udf = udf(lambda end, start: months_diff_by_python_code(end, start))
+df = df.withColumn("months_diff", round(months_between(col("end_date"), col("start_date")))) \
+    .withColumn("months_diff_usingUDF", months_between_udf(col("end_date"), col("start_date")))
 
 df.show(truncate=False)
-
 
 
